@@ -19,17 +19,17 @@ A powerful AWS CDK construct for creating AWS Secrets Manager secrets containing
 ## 📦 Installation
 
 ```bash
-npm install @jvanmelckebeke/cdk-multi-secret-construct
+npm install cdk-multi-secret-construct
 ```
 
 ```bash
-yarn add @jvanmelckebeke/cdk-multi-secret-construct
+yarn add cdk-multi-secret-construct
 ```
 
 ## 🎯 Quick Start
 
 ```typescript
-import { MultiSecret } from '@jvanmelckebeke/cdk-multi-secret-construct';
+import { MultiSecret } from 'cdk-multi-secret-construct';
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 

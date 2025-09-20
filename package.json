@@ -1,11 +1,11 @@
 {
   "name": "cdk-multi-secret-construct",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "AWS CDK construct for creating Secrets Manager secrets with multiple auto-generated key-value pairs",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r src/assets lib/",
     "watch": "tsc -w",
     "test": "jest",
     "clean": "rm -rf lib/ *.tgz",

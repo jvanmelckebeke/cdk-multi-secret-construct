@@ -19,10 +19,10 @@
     "strictPropertyInitialization": false,
     "typeRoots": ["./node_modules/@types"],
     "outDir": "./lib",
-    "rootDir": "./lib"
+    "rootDir": "./src"
   },
   "include": [
-    "lib/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

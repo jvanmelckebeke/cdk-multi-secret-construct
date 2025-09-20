@@ -8,16 +8,31 @@ import * as path from 'path';
 
 /**
  * Configuration for a single secret key within the multi-secret.
+ * Based on AWS Secrets Manager SecretStringGenerator interface.
  */
 export interface SecretKeyConfig {
   /** The key name in the secret JSON */
   readonly name: string;
-  /** Length of the generated value (default: 32) */
-  readonly length?: number;
-  /** Characters to exclude from generation */
+  /** A string that includes characters that shouldn't be included in the generated password */
   readonly excludeCharacters?: string;
-  /** Ensure at least one of each character type (uppercase, lowercase, digit, symbol) */
+  /** Specifies that the generated password shouldn't include lowercase letters */
+  readonly excludeLowercase?: boolean;
+  /** Specifies that the generated password shouldn't include digits */
+  readonly excludeNumbers?: boolean;
+  /** Specifies that the generated password shouldn't include punctuation characters */
+  readonly excludePunctuation?: boolean;
+  /** Specifies that the generated password shouldn't include uppercase letters */
+  readonly excludeUppercase?: boolean;
+  /** The JSON key name that's used to add the generated password to the JSON structure specified by the secretStringTemplate parameter */
+  readonly generateStringKey?: string;
+  /** Specifies that the generated password can include the space character */
+  readonly includeSpace?: boolean;
+  /** The desired length of the generated password (default: 32) */
+  readonly passwordLength?: number;
+  /** Specifies whether the generated password must include at least one of every allowed character type */
   readonly requireEachIncludedType?: boolean;
+  /** A properly structured JSON string that the generated password can be added to */
+  readonly secretStringTemplate?: string;
 }
 
 /**
@@ -49,12 +64,12 @@ export interface MultiSecretProps {
  *   secretKeys: [
  *     {
  *       name: 'apiKey',
- *       length: 32,
+ *       passwordLength: 32,
  *       excludeCharacters: '/@"\\\'',
  *     },
  *     {
  *       name: 'dbPassword',
- *       length: 24,
+ *       passwordLength: 24,
  *       requireEachIncludedType: true,
  *     },
  *   ],

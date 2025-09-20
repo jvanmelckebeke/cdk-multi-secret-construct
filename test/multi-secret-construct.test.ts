@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Template, Match } from 'aws-cdk-lib/assertions';
-import { MultiSecret, SecretKeyConfig } from '../lib/multi-secret-construct';
+import { MultiSecret, SecretKeyConfig } from '../src/multi-secret-construct';
 
 describe('MultiSecret', () => {
   let stack: cdk.Stack;
@@ -13,8 +13,8 @@ describe('MultiSecret', () => {
   describe('Basic functionality', () => {
     test('creates a secret with basic configuration', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'apiKey', length: 32 },
-        { name: 'dbPassword', length: 24, requireEachIncludedType: true },
+        { name: 'apiKey', passwordLength: 32 },
+        { name: 'dbPassword', passwordLength: 24, requireEachIncludedType: true },
       ];
 
       new MultiSecret(stack, 'TestSecret', {
@@ -46,11 +46,11 @@ describe('MultiSecret', () => {
         SecretKeys: [
           {
             name: 'apiKey',
-            length: 32,
+            passwordLength: 32,
           },
           {
             name: 'dbPassword',
-            length: 24,
+            passwordLength: 24,
             requireEachIncludedType: true,
           },
         ],
@@ -59,7 +59,7 @@ describe('MultiSecret', () => {
 
     test('creates IAM permissions for Lambda to update secret', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'testKey', length: 32 },
+        { name: 'testKey', passwordLength: 32 },
       ];
 
       new MultiSecret(stack, 'TestSecret', {
@@ -97,8 +97,8 @@ describe('MultiSecret', () => {
 
     test('throws error when secret key names are not unique', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'duplicate', length: 32 },
-        { name: 'duplicate', length: 24 },
+        { name: 'duplicate', passwordLength: 32 },
+        { name: 'duplicate', passwordLength: 24 },
       ];
 
       expect(() => {
@@ -112,8 +112,8 @@ describe('MultiSecret', () => {
   describe('getSecret method', () => {
     test('returns ECS secret for valid key', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'apiKey', length: 32 },
-        { name: 'dbPassword', length: 24 },
+        { name: 'apiKey', passwordLength: 32 },
+        { name: 'dbPassword', passwordLength: 24 },
       ];
 
       const multiSecret = new MultiSecret(stack, 'TestSecret', {
@@ -131,7 +131,7 @@ describe('MultiSecret', () => {
 
     test('throws error for invalid key', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'apiKey', length: 32 },
+        { name: 'apiKey', passwordLength: 32 },
       ];
 
       const multiSecret = new MultiSecret(stack, 'TestSecret', {
@@ -147,7 +147,7 @@ describe('MultiSecret', () => {
   describe('Advanced configuration', () => {
     test('supports custom KMS key', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'testKey', length: 32 },
+        { name: 'testKey', passwordLength: 32 },
       ];
 
       const kmsKey = new cdk.aws_kms.Key(stack, 'TestKey');
@@ -168,7 +168,7 @@ describe('MultiSecret', () => {
 
     test('supports custom secret name', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'testKey', length: 32 },
+        { name: 'testKey', passwordLength: 32 },
       ];
 
       new MultiSecret(stack, 'TestSecret', {
@@ -185,7 +185,7 @@ describe('MultiSecret', () => {
 
     test('supports different removal policies', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'testKey', length: 32 },
+        { name: 'testKey', passwordLength: 32 },
       ];
 
       new MultiSecret(stack, 'TestSecret', {
@@ -207,11 +207,11 @@ describe('MultiSecret', () => {
       const secretKeys: SecretKeyConfig[] = [
         {
           name: 'simpleKey',
-          length: 16,
+          passwordLength: 16,
         },
         {
           name: 'complexKey',
-          length: 32,
+          passwordLength: 32,
           excludeCharacters: '/@"\\\'',
           requireEachIncludedType: true,
         },
@@ -227,13 +227,69 @@ describe('MultiSecret', () => {
         SecretKeys: [
           {
             name: 'simpleKey',
-            length: 16,
+            passwordLength: 16,
           },
           {
             name: 'complexKey',
-            length: 32,
+            passwordLength: 32,
             excludeCharacters: '/@"\\\'',
             requireEachIncludedType: true,
+          },
+        ],
+      });
+    });
+
+    test('supports new SecretStringGenerator properties', () => {
+      const secretKeys: SecretKeyConfig[] = [
+        {
+          name: 'numbersOnlyKey',
+          passwordLength: 20,
+          excludeLowercase: true,
+          excludeUppercase: true,
+          excludePunctuation: true,
+        },
+        {
+          name: 'lettersOnlyKey',
+          passwordLength: 25,
+          excludeNumbers: true,
+          excludePunctuation: true,
+          includeSpace: true,
+        },
+        {
+          name: 'templatedKey',
+          passwordLength: 16,
+          secretStringTemplate: JSON.stringify({ username: 'admin' }),
+          generateStringKey: 'password',
+        },
+      ];
+
+      new MultiSecret(stack, 'TestSecret', {
+        secretKeys,
+      });
+
+      const template = Template.fromStack(stack);
+
+      template.hasResourceProperties('AWS::CloudFormation::CustomResource', {
+        SecretKeys: [
+          {
+            name: 'numbersOnlyKey',
+            passwordLength: 20,
+            excludeLowercase: true,
+            excludeUppercase: true,
+            excludePunctuation: true,
+          },
+          {
+            name: 'lettersOnlyKey',
+            passwordLength: 25,
+            excludeNumbers: true,
+            excludePunctuation: true,
+            includeSpace: true,
+          },
+          {
+            name: 'templatedKey',
+            passwordLength: 16,
+            secretStringTemplate: JSON.stringify({ username: 'admin' }),
+            generateStringKey: 'password',
           },
         ],
       });
@@ -243,7 +299,7 @@ describe('MultiSecret', () => {
   describe('Resource dependencies', () => {
     test('custom resource depends on secret', () => {
       const secretKeys: SecretKeyConfig[] = [
-        { name: 'testKey', length: 32 },
+        { name: 'testKey', passwordLength: 32 },
       ];
 
       new MultiSecret(stack, 'TestSecret', {
@@ -269,7 +325,7 @@ describe('MultiSecret', () => {
   describe('Configuration hash', () => {
     test('generates hashes for configurations', () => {
       const secretKeys1: SecretKeyConfig[] = [
-        { name: 'key1', length: 32 },
+        { name: 'key1', passwordLength: 32 },
       ];
 
       new MultiSecret(stack, 'TestSecret1', {

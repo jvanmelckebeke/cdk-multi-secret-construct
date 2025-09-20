@@ -1,5 +1,5 @@
 {
-  "name": "cdk-multi-secret-construct",
+  "name": "@jvanmelckebeke/cdk-multi-secret-construct",
   "version": "0.1.0",
   "description": "AWS CDK construct for creating Secrets Manager secrets with multiple auto-generated key-value pairs",
   "main": "lib/index.js",

@@ -1,0 +1,60 @@
+{
+  "name": "cdk-multi-secret-construct",
+  "version": "0.1.0",
+  "description": "AWS CDK construct for creating Secrets Manager secrets with multiple auto-generated key-value pairs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "clean": "rm -rf lib/ *.tgz",
+    "package": "npm run build && npm pack",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "files": [
+    "lib/"
+  ],
+  "keywords": [
+    "aws",
+    "cdk",
+    "secrets-manager",
+    "multi-secret",
+    "secret-generation",
+    "aws-cdk-construct",
+    "typescript"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/cdk-multi-secret-construct.git"
+  },
+  "homepage": "https://github.com/yourusername/cdk-multi-secret-construct#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/cdk-multi-secret-construct/issues"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.7.9",
+    "aws-cdk-lib": "^2.213.0",
+    "constructs": "^10.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "~5.6.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/*.test.ts"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

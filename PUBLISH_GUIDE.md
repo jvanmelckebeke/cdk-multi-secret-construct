@@ -116,8 +116,8 @@ import { MultiSecret } from 'cdk-multi-secret-construct';
 
 const secrets = new MultiSecret(this, 'MySecrets', {
   secretKeys: [
-    { name: 'apiKey', length: 32 },
-    { name: 'dbPassword', length: 24, requireEachIncludedType: true },
+    { name: 'apiKey', passwordLength: 32 },
+    { name: 'dbPassword', passwordLength: 24, requireEachIncludedType: true },
   ],
 });
 ```

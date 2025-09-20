@@ -85,29 +85,20 @@ const templatedSecrets = new MultiSecret(this, 'TemplatedSecrets', {
 });
 ```
 
-## Backward Compatibility
+## Breaking Change Notice
 
-The construct maintains backward compatibility with the old `length` property:
+**Version 0.2.0+**: The old `length` property has been removed. Use `passwordLength` instead:
 
 ```typescript
-// Old style still works
-const oldStyle = new MultiSecret(this, 'OldStyle', {
-  secretKeys: [
-    {
-      name: 'legacyKey',
-      length: 32,                      // Still supported
-      excludeCharacters: '/@"\\\'',
-      requireEachIncludedType: true,
-    },
-  ],
-});
+// ❌ Old style no longer supported (removed in v0.2.0)
+// { name: 'key', length: 32 }
 
-// New style is preferred
-const newStyle = new MultiSecret(this, 'NewStyle', {
+// ✅ New style (required in v0.2.0+)
+const modernStyle = new MultiSecret(this, 'ModernStyle', {
   secretKeys: [
     {
       name: 'modernKey',
-      passwordLength: 32,              // Preferred
+      passwordLength: 32,              // Required property name
       excludeCharacters: '/@"\\\'',
       requireEachIncludedType: true,
     },
@@ -153,27 +144,27 @@ const dbCredentials = multiSecret.getSecretValue('databaseCredentials');
 | `secretStringTemplate` | string | A JSON string template that the generated password will be added to |
 | `generateStringKey` | string | The key name where the generated password will be placed in the template |
 
-## Migration from Old Interface
+## Migration from v0.1.x to v0.2.0+
 
-If you're upgrading from an older version:
+**Breaking Change**: The `length` property has been removed. Migration steps:
 
-1. Replace `length` with `passwordLength`
+1. **Replace `length` with `passwordLength`** in all secret key configurations
 2. All other properties remain the same
 3. New properties are optional and can be added as needed
 
 ```typescript
-// Before
+// ❌ Before (v0.1.x)
 {
   name: 'mySecret',
-  length: 32,
+  length: 32,                          // Removed in v0.2.0
   excludeCharacters: '/@"\\\'',
   requireEachIncludedType: true,
 }
 
-// After
+// ✅ After (v0.2.0+)
 {
   name: 'mySecret',
-  passwordLength: 32,  // Changed property name
+  passwordLength: 32,                  // Required property name
   excludeCharacters: '/@"\\\'',
   requireEachIncludedType: true,
   // Add new properties as needed
@@ -181,3 +172,7 @@ If you're upgrading from an older version:
   includeSpace: false,
 }
 ```
+
+**Search and Replace**: Use this regex to update your code:
+- Find: `length:\s*(\d+)`
+- Replace: `passwordLength: $1`

@@ -124,8 +124,8 @@ def generate_multiple_secrets(secret_keys: List[Dict[str, Any]]) -> Dict[str, st
     for key_config in secret_keys:
         name = key_config['name']
 
-        # Support both old and new parameter names for backward compatibility
-        password_length = int(key_config.get('passwordLength', key_config.get('length', 32)))
+        # Extract SecretStringGenerator parameters
+        password_length = int(key_config.get('passwordLength', 32))
         exclude_characters = key_config.get('excludeCharacters', '')
         exclude_lowercase = key_config.get('excludeLowercase', False)
         exclude_numbers = key_config.get('excludeNumbers', False)

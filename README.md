@@ -42,18 +42,18 @@ export class MyStack extends cdk.Stack {
       secretKeys: [
         {
           name: 'apiKey',
-          length: 32,
+          passwordLength: 32,
           excludeCharacters: '/@"\\\'',
         },
         {
           name: 'dbPassword',
-          length: 24,
+          passwordLength: 24,
           requireEachIncludedType: true, // Ensures mixed case + digits + symbols
           excludeCharacters: '/@"\\\'`',
         },
         {
           name: 'jwtSecret',
-          length: 64,
+          passwordLength: 64,
         },
       ],
       description: 'Application secrets for MyApp',
@@ -155,8 +155,8 @@ multiSecret.grantWrite(myLambdaFunction);
 ```typescript
 const secrets = new MultiSecret(this, 'BasicSecrets', {
   secretKeys: [
-    { name: 'apiKey', length: 32 },
-    { name: 'webhookSecret', length: 40 },
+    { name: 'apiKey', passwordLength: 32 },
+    { name: 'webhookSecret', passwordLength: 40 },
   ],
 });
 ```
@@ -168,18 +168,18 @@ const secrets = new MultiSecret(this, 'ComplexSecrets', {
   secretKeys: [
     {
       name: 'apiKey',
-      length: 32,
+      passwordLength: 32,
       excludeCharacters: '/@"\\\'',
     },
     {
       name: 'dbPassword',
-      length: 24,
+      passwordLength: 24,
       requireEachIncludedType: true,
       excludeCharacters: '/@"\\\'`',
     },
     {
       name: 'jwtSecret',
-      length: 64,
+      passwordLength: 64,
     },
   ],
   description: 'Production secrets for MyApp',
@@ -192,8 +192,8 @@ const secrets = new MultiSecret(this, 'ComplexSecrets', {
 ```typescript
 const secrets = new MultiSecret(this, 'EcsSecrets', {
   secretKeys: [
-    { name: 'dbPassword', length: 32, requireEachIncludedType: true },
-    { name: 'apiKey', length: 40 },
+    { name: 'dbPassword', passwordLength: 32, requireEachIncludedType: true },
+    { name: 'apiKey', passwordLength: 40 },
   ],
 });
 
@@ -215,8 +215,8 @@ taskDefinition.addContainer('App', {
 ```typescript
 const secrets = new MultiSecret(this, 'LambdaSecrets', {
   secretKeys: [
-    { name: 'apiKey', length: 32 },
-    { name: 'encryptionKey', length: 64 },
+    { name: 'apiKey', passwordLength: 32 },
+    { name: 'encryptionKey', passwordLength: 64 },
   ],
 });
 

@@ -28,11 +28,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/cdk-multi-secret-construct.git"
+    "url": "https://github.com/jvanmelckebeke/cdk-multi-secret-construct.git"
   },
-  "homepage": "https://github.com/yourusername/cdk-multi-secret-construct#readme",
+  "homepage": "https://github.com/jvanmelckebeke/cdk-multi-secret-construct#readme",
   "bugs": {
-    "url": "https://github.com/yourusername/cdk-multi-secret-construct/issues"
+    "url": "https://github.com/jvanmelckebeke/cdk-multi-secret-construct/issues"
   },
   "peerDependencies": {
     "aws-cdk-lib": "^2.0.0",
